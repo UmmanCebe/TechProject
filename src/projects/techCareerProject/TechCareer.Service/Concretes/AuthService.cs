@@ -1,8 +1,11 @@
-﻿using Core.AOP.Aspects;
+﻿using AutoMapper;
+using Core.AOP.Aspects;
+using Core.Persistence.Extensions;
 using Core.Security.Dtos;
 using Core.Security.Entities;
 using Core.Security.Hashing;
 using Core.Security.JWT;
+using TechCareer.Models.Dtos.Users;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
 using TechCareer.Service.Validations.Users;
@@ -12,7 +15,8 @@ namespace TechCareer.Service.Concretes;
 public sealed class AuthService(
     UserBusinessRules _rules, 
     IUserWithTokenService _tokenService,
-    IUserService _userService
+    IUserService _userService,
+    IMapper _mapper
     ) : IAuthService
 {
 
@@ -34,6 +38,7 @@ public sealed class AuthService(
 
     }
 
+    [ClearCacheAspect("Users")]
     public async Task<AccessToken> RegisterAsync(UserForRegisterDto dto,CancellationToken cancellationToken)
     {
         HashingHelper.CreatePasswordHash(
@@ -58,4 +63,14 @@ public sealed class AuthService(
 
       return createdAccessToken;
     }
+
+    [CacheAspect(cacheKeyTemplate:"Users({page},{size})",bypassCache:false,cacheGroupKey:"Users")]
+    public async Task<Paginate<UserResponseDto>> GetAllPaginateAsync(int page, int size)
+    {
+        var users = await _userService.GetPaginateAsync(index: page, size: size,include:false);
+        var response = _mapper.Map<Paginate<UserResponseDto>>(users);
+        return response;
+    }
+
+   
 }

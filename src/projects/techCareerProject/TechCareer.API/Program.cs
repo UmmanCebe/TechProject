@@ -18,7 +18,7 @@ builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddServiceDependencies();
 builder.Services.AddSecurityServices();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddStackExchangeRedisCache(opt=>opt.Configuration="localhost:6379");
 ServiceTool.Create(builder.Services);
 
 const string tokenOptionsConfigurationSection = "TokenOptions";

@@ -79,18 +79,38 @@ public class EfRepositoryBase<TEntity, TEntityId, TContext> : IAsyncRepository<T
 
     public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, bool include = true, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
-        var query = ToListWithQueries(predicate, orderBy, include, withDeleted, enableTracking, cancellationToken);
+        IQueryable<TEntity> queryable = Query();
+        if (!enableTracking)
+            queryable = queryable.AsNoTracking();
+        if (include == false)
+            queryable = queryable.IgnoreAutoIncludes();
+        if (predicate != null)
+            queryable = queryable.Where(predicate);
+        if (withDeleted)
+            queryable = queryable.IgnoreQueryFilters();
+        if (orderBy != null)
+            queryable = orderBy(queryable);
 
-        return await query.ToListAsync();
+        return await queryable.ToListAsync();
     }
 
  
 
     public async Task<Paginate<TEntity>> GetPaginateAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, bool include = true, int index = 0, int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
-        var query = ToListWithQueries(predicate, orderBy, include, withDeleted, enableTracking, cancellationToken);
+        IQueryable<TEntity> queryable = Query();
+        if (!enableTracking)
+            queryable = queryable.AsNoTracking();
+        if (include == false)
+            queryable = queryable.IgnoreAutoIncludes();
+        if (predicate != null)
+            queryable = queryable.Where(predicate);
+        if (withDeleted)
+            queryable = queryable.IgnoreQueryFilters();
+        if (orderBy != null)
+            return await orderBy(queryable).ToPaginateAsync(index, size, cancellationToken);
 
-        return await query.ToPaginateAsync(index, size, cancellationToken);
+        return await queryable.ToPaginateAsync(index, size, cancellationToken);
     }
 
     public IQueryable<TEntity> Query() => Context.Set<TEntity>();
@@ -200,22 +220,5 @@ public class EfRepositoryBase<TEntity, TEntityId, TContext> : IAsyncRepository<T
         }
 
         Context.Update(entity);
-    }
-
-   
-    private IQueryable<TEntity> ToListWithQueries(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, bool include = true,  bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken=default)
-    {
-        IQueryable<TEntity> queryable = Query();
-        if (!enableTracking)
-            queryable = queryable.AsNoTracking();
-        if (include == false)
-            queryable = queryable.IgnoreAutoIncludes();
-        if (withDeleted)
-            queryable = queryable.IgnoreQueryFilters();
-        if (orderBy != null)
-            queryable = orderBy(queryable);
-
-
-        return queryable;
     }
 }

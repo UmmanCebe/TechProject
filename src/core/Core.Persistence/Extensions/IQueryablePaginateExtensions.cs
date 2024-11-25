@@ -6,23 +6,25 @@ namespace Core.Persistence.Extensions;
 public static class IQueryablePaginateExtensions
 {
     public static async Task<Paginate<T>> ToPaginateAsync<T>(
-        this IQueryable<T> source,
-        int index,
-        int size,
-        CancellationToken cancellationToken = default
-    )
+       this IQueryable<T> source,
+       int index,
+       int size,
+       CancellationToken cancellationToken = default
+   )
     {
-        int count = await source.CountAsync(cancellationToken).ConfigureAwait(false);
-        List<T> items = await source.Skip(index * size).Take(size).ToListAsync(cancellationToken).ConfigureAwait(false);
-        Paginate<T> list = new()
+      
+        List<T> items = await source.Skip(index * size).Take(size + 1).ToListAsync(cancellationToken);
+
+        int count = items.Count > size ? items.Count + index * size : items.Count;
+
+        return new Paginate<T>
         {
             Index = index,
             Count = count,
-            Items = items,
+            Items = items.Take(size).ToList(),
             Size = size,
             Pages = (int)Math.Ceiling(count / (double)size)
         };
-        return list;
     }
 
     public static Paginate<T> ToPaginate<T>(this IQueryable<T> source, int index, int size)

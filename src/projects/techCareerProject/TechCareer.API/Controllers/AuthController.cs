@@ -15,4 +15,11 @@ public class AuthController(IAuthService _authService) : ControllerBase
         var result = await _authService.LoginAsync(dto, cancellationToken);
         return Ok(result);
     }
+
+    [HttpGet("getallpaginate")]
+    public async Task<IActionResult> GetAllUsers([FromQuery] int index, [FromQuery] int size)
+    {
+        var result = await _authService.GetAllPaginateAsync(index, size);
+        return Ok(result);
+    }
 }

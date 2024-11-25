@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Core.AOP.Aspects;
 using Core.Persistence.Extensions;
 using Core.Security.Entities;
 using TechCareer.DataAccess.Repositories.Abstracts;
@@ -15,6 +16,8 @@ public sealed class UserService(IUserRepository _userRepository, UserBusinessRul
         return user;
     }
 
+    
+    //[CacheAspect(bypassCache:false, cacheKeyTemplate:"Users({index},{size})",cacheGroupKey:"Users",Priority = 3)]
     public async Task<Paginate<User>> GetPaginateAsync(Expression<Func<User, bool>>? predicate = null, Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null, bool include = false, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -32,7 +35,7 @@ public sealed class UserService(IUserRepository _userRepository, UserBusinessRul
     }
 
     public async Task<List<User>> GetListAsync(Expression<Func<User, bool>>? predicate = null, Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null, bool include = false, bool withDeleted = false,
-        bool enableTracking = true, CancellationToken cancellationToken = default)
+        bool enableTracking = false, CancellationToken cancellationToken = default)
     {
         List<User> userList = await _userRepository.GetListAsync(
             predicate,orderBy,include,withDeleted,enableTracking,cancellationToken

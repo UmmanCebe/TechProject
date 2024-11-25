@@ -18,7 +18,7 @@ public static class DataAccessServiceRegistration
         services.AddDbContext<BaseDbContext>(opt =>
         {
             opt.UseSqlServer(configuration.GetConnectionString("SqlConnection"));
-        });
+        }, ServiceLifetime.Scoped);
 
         return services;
     }
