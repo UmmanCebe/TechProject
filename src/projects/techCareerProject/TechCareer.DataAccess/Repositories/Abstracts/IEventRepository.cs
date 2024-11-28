@@ -1,9 +1,9 @@
 ﻿using Core.Persistence.Repositories;
-using Core.Security.Entities;
+using TechCareer.Models.Entities;
 
 namespace TechCareer.DataAccess.Repositories.Abstracts;
 
-public interface IUserRepository : IAsyncRepository<User,int>
+public interface IEventRepository : IAsyncRepository<Event, Guid>
 {
-    
+
 }
