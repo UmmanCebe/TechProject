@@ -4,11 +4,11 @@ namespace TechCareer.Models.Dtos.VideoEducation.RequestDto;
 
 public class VideoEducationUpdateRequest
 {
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public double TotalHour { get; set; }
-    public bool IsCertified { get; set; }
-    public Level Level { get; set; }
-    public string ImageUrl { get; set; }
-    public string ProgrammingLanguage { get; set; }
+    public string Title { get; init; }
+    public string Description { get; init; }
+    public double TotalHour { get; init; }
+    public bool IsCertified { get; init; }
+    public Level Level { get; init; }
+    public string ImageUrl { get; init; }
+    public string ProgrammingLanguage { get; init; }
 }
