@@ -5,5 +5,5 @@ namespace TechCareer.DataAccess.Repositories.Abstracts;
 
 public interface IVideoEducationRepository : IAsyncRepository<VideoEducation, int>
 {
-
+    Task<List<VideoEducation>> GetVideoEducationsByInstructor(Guid instructorId);
 }
