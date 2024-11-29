@@ -2,7 +2,7 @@
 
 namespace TechCareer.Models.Dtos.VideoEducation.RequestDto;
 
-public class VideoEducationUpdateRequest
+public class EventUpdateRequest
 {
     public string Title { get; init; }
     public string Description { get; init; }
