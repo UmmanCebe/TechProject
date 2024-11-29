@@ -1,25 +1,34 @@
 ﻿using System.Linq.Expressions;
+using AutoMapper;
 using Core.AOP.Aspects;
 using Core.Persistence.Extensions;
 using Core.Security.Entities;
 using TechCareer.DataAccess.Repositories.Abstracts;
+using TechCareer.Models.Dtos.VideoEducation.RequestDto;
+using TechCareer.Models.Dtos.VideoEducation.ResponseDto;
 using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
 
 namespace TechCareer.Service.Concretes;
-public sealed class VideoEducationService(IVideoEducationRepository _videoEducationRepository, VideoEducationBusinessRules _videoEducationBusinessRules) : IVideoEducationService
+public sealed class VideoEducationService(
+    IVideoEducationRepository _videoEducationRepository,
+    VideoEducationBusinessRules _videoEducationBusinessRules,
+    IMapper mapper) : IVideoEducationService
 {
-    public async Task<VideoEducation?> GetAsync(Expression<Func<VideoEducation, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true,
+    public async Task<VideoEducationResponse> GetAsync(Expression<Func<VideoEducation, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true,
         CancellationToken cancellationToken = default)
     {
-        var videoEducation = await _videoEducationRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
-        return videoEducation;
+        VideoEducation? videoEducation = await _videoEducationRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
+
+        VideoEducationResponse response = mapper.Map<VideoEducationResponse>(videoEducation);
+
+        return response;
     }
 
 
     //[CacheAspect(bypassCache:false, cacheKeyTemplate:"VideoEducations({index},{size})",cacheGroupKey:"VideoEducations",Priority = 3)]
-    public async Task<Paginate<VideoEducation>> GetPaginateAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, int index = 0,
+    public async Task<Paginate<VideoEducationResponse>> GetPaginateAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
         Paginate<VideoEducation> videoEducationList = await _videoEducationRepository.GetPaginateAsync(
@@ -32,42 +41,59 @@ public sealed class VideoEducationService(IVideoEducationRepository _videoEducat
             enableTracking,
             cancellationToken
         );
-        return videoEducationList;
+
+        Paginate<VideoEducationResponse> response = mapper.Map<Paginate<VideoEducationResponse>>(videoEducationList);
+        return response;
     }
 
-    public async Task<List<VideoEducation>> GetListAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, bool withDeleted = false,
+    public async Task<List<VideoEducationResponse>> GetListAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, bool withDeleted = false,
         bool enableTracking = false, CancellationToken cancellationToken = default)
     {
         List<VideoEducation> videoEducationList = await _videoEducationRepository.GetListAsync(
             predicate, orderBy, include, withDeleted, enableTracking, cancellationToken
         );
-        return videoEducationList;
+
+        List<VideoEducationResponse> response = mapper.Map<List<VideoEducationResponse>>(videoEducationList);
+
+        return response;
     }
 
-    public async Task<VideoEducation> AddAsync(VideoEducation videoEducation)
+    public async Task<VideoEducationResponse> AddAsync(VideoEducationCreateRequest request)
     {
-        // TODO: video education business rules
+        VideoEducation videoEducation = mapper.Map<VideoEducation>(request);
 
         VideoEducation addedVideoEducation = await _videoEducationRepository.AddAsync(videoEducation);
 
-        return addedVideoEducation;
+        VideoEducationResponse response = mapper.Map<VideoEducationResponse>(addedVideoEducation);
+
+        return response;
     }
 
-    public async Task<VideoEducation> UpdateAsync(VideoEducation videoEducation)
+    public async Task<VideoEducationResponse> UpdateAsync(int id, VideoEducationUpdateRequest request)
     {
-        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(videoEducation.Id);
+        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(id);
+
+        VideoEducation videoEducation = (await _videoEducationRepository.GetAsync(u => u.Id == id))!;
+
+        videoEducation = mapper.Map(request, videoEducation);
 
         VideoEducation updatedVideoEducation = await _videoEducationRepository.UpdateAsync(videoEducation);
 
-        return updatedVideoEducation;
+        VideoEducationResponse response = mapper.Map<VideoEducationResponse>(updatedVideoEducation);
+
+        return response;
     }
 
-    public async Task<VideoEducation> DeleteAsync(VideoEducation videoEducation, bool permanent = false)
+    public async Task<VideoEducationResponse> DeleteAsync(int id, bool permanent = false)
     {
-        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(videoEducation.Id);
+        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(id);
 
-        VideoEducation deletedVideoEducation = await _videoEducationRepository.DeleteAsync(videoEducation, permanent);
+        VideoEducation videoEducationToBeDeleted = (await _videoEducationRepository.GetAsync(u => u.Id == id))!;
 
-        return deletedVideoEducation;
+        VideoEducation deletedVideoEducation = await _videoEducationRepository.DeleteAsync(videoEducationToBeDeleted, permanent);
+
+        VideoEducationResponse response = mapper.Map<VideoEducationResponse>(deletedVideoEducation);
+
+        return response;
     }
 }
