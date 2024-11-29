@@ -24,6 +24,7 @@ public static class BusinessServiceRegistration
         services.AddScoped<IUserWithTokenService, UserWithTokenService>();
         services.AddScoped<LoggerServiceBase, FileLogger>();
         services.AddScoped<IOperationClaimService, OperationClaimService>();
+        services.AddScoped<IVideoEducationService, VideoEducationService>();
         return services;
     }
     

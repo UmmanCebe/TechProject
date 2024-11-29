@@ -21,7 +21,7 @@ public sealed class VideoEducationBusinessRules(IVideoEducationRepository _video
     public async Task VideoEducationIdShouldBeExistsWhenSelected(int id)
     {
         bool doesExist = await _videoEducationRepository.AnyAsync(predicate: u => u.Id == id, enableTracking: false);
-        if (doesExist)
+        if (doesExist is false)
             throw new BusinessException("Video education does not exist");
     }
 }

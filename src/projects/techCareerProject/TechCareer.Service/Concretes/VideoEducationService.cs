@@ -77,6 +77,8 @@ public sealed class VideoEducationService(
 
         videoEducation = mapper.Map(request, videoEducation);
 
+        videoEducation.Id = id;
+
         VideoEducation updatedVideoEducation = await _videoEducationRepository.UpdateAsync(videoEducation);
 
         VideoEducationResponse response = mapper.Map<VideoEducationResponse>(updatedVideoEducation);
