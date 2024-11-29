@@ -55,7 +55,7 @@ public sealed class VideoEducationService(IVideoEducationRepository _videoEducat
 
     public async Task<VideoEducation> UpdateAsync(VideoEducation videoEducation)
     {
-        // TODO: video education business rules
+        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(videoEducation.Id);
 
         VideoEducation updatedVideoEducation = await _videoEducationRepository.UpdateAsync(videoEducation);
 
@@ -64,7 +64,7 @@ public sealed class VideoEducationService(IVideoEducationRepository _videoEducat
 
     public async Task<VideoEducation> DeleteAsync(VideoEducation videoEducation, bool permanent = false)
     {
-        // TODO: video education business rules
+        await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(videoEducation.Id);
 
         VideoEducation deletedVideoEducation = await _videoEducationRepository.DeleteAsync(videoEducation, permanent);
 
