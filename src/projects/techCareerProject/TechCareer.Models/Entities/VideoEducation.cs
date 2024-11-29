@@ -11,5 +11,6 @@ public class VideoEducation : Entity<int>
     public Level Level { get; set; }
     public string ImageUrl { get; set; }
     public Guid InstructorId { get; set; }
+    public Instructor? Instructor { get; set; }
     public string ProgrammingLanguage { get; set; }
 }
