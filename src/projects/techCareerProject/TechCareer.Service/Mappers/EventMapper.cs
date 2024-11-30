@@ -14,9 +14,10 @@ public  class EventMapper :Profile
     public EventMapper()
     {
         CreateMap<Event, EventResponseDto>();
+        CreateMap<EventResponseDto, Event>();
         CreateMap<EventCreateRequestDto, Event>();
-
+        CreateMap<EventUpdateRequestDto, Event>();
         CreateMap<Paginate<Event>, Paginate<EventResponseDto>>();
-        CreateMap<EventUpdateRequest, Event>();
+       
     }
 }
