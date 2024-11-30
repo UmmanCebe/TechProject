@@ -6,16 +6,16 @@ using TechCareer.Service.Constants;
 
 namespace TechCareer.Service.Rules;
 
-public sealed class VideoEducationBusinessRules(IVideoEducationRepository _videoEducationRepository) : BaseBusinessRules
+public class VideoEducationBusinessRules(IVideoEducationRepository _videoEducationRepository) : BaseBusinessRules
 {
-    public Task VideoEducationShouldBeExistsWhenSelected(VideoEducation? videoEducation)
+    public virtual Task VideoEducationShouldBeExistsWhenSelected(VideoEducation? videoEducation)
     {
         if (videoEducation == null)
             throw new BusinessException(VideoEducationMessages.DontExists);
         return Task.CompletedTask;
     }
 
-    public async Task VideoEducationIdShouldBeExistsWhenSelected(int id)
+    public async virtual Task VideoEducationIdShouldBeExistsWhenSelected(int id)
     {
         bool doesExist = await _videoEducationRepository.AnyAsync(predicate: u => u.Id == id, enableTracking: false);
         if (doesExist is false)

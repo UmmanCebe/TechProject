@@ -11,7 +11,7 @@ using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
 
 namespace TechCareer.Service.Concretes;
-public sealed class VideoEducationService(
+public class VideoEducationService(
     IVideoEducationRepository _videoEducationRepository,
     VideoEducationBusinessRules _videoEducationBusinessRules,
     IMapper mapper) : IVideoEducationService
