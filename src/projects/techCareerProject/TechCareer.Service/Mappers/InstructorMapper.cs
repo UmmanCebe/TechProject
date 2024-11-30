@@ -12,8 +12,8 @@ public class InstructorMapper : Profile
 {
     public InstructorMapper()
     {
-        CreateMap<Instructor,InstructorCreateRequestDto>();
-        CreateMap<Instructor, InstructorUpdateRequestDto>();
+        CreateMap<InstructorCreateRequestDto,Instructor>();
+        CreateMap<InstructorUpdateRequestDto,Instructor>();
         CreateMap<Instructor, InstructorResponseDto>();
         CreateMap<Paginate<Instructor>, Paginate<InstructorResponseDto>>();
     }
