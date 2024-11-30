@@ -15,7 +15,7 @@ public class EventsController(IEventService eventService) : ControllerBase
     [HttpGet]
     public  async Task<IActionResult> GetList()
     {
-        var result= await eventService.GetListAsync();
+        var result= await eventService.GetListAsync(include: true);
         return Ok(result);
     }
 
@@ -23,14 +23,19 @@ public class EventsController(IEventService eventService) : ControllerBase
     [HttpGet("getallpaginate")]
     public async Task<IActionResult> GetPaginate([FromQuery] int index, [FromQuery] int size)
     {
-        var result = await eventService.GetPaginateAsync(index: index, size: size);
+        var result = await eventService.GetPaginateAsync(
+            index: index,
+            size: size,
+            include: true);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var result=await eventService.GetAsync(u=>u.Id==id);
+        var result=await eventService.GetAsync(
+            predicate: u => u.Id == id,
+            include: true);
         return Ok(result);
     }
 

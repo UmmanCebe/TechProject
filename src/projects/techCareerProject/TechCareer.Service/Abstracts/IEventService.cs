@@ -9,7 +9,7 @@ namespace TechCareer.Service.Abstracts;
 public interface IEventService
 {
     Task<EventResponseDto> GetAsync(
-        Expression<Func<EventResponseDto, bool>> predicate,
+        Expression<Func<Event, bool>> predicate,
         bool include = false,
         bool withDeleted = false,
         bool enableTracking = true,
@@ -26,7 +26,7 @@ public interface IEventService
         CancellationToken cancellationToken = default);
 
     Task<List<EventResponseDto>> GetListAsync(
-        Expression<Func<EventResponseDto, bool>>? predicate = null,
+        Expression<Func<Event, bool>>? predicate = null,
         Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null,
         bool include = false,
         bool withDeleted = false,

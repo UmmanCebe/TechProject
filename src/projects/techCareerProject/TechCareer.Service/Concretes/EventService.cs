@@ -15,7 +15,7 @@ namespace TechCareer.Service.Concretes;
 public sealed class EventService(IEventRepository _eventRepository, EventBusinessRules _eventBusinessRules, IMapper mapper) : IEventService
 {
 
-    public async Task<EventResponseDto> GetAsync(Expression<Func<EventResponseDto, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
+    public async Task<EventResponseDto> GetAsync(Expression<Func<Event, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
        Event? @event = await _eventRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
 
@@ -42,9 +42,9 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     }
 
 
-    public async Task<List<EventResponseDto>> GetListAsync(Expression<Func<EventResponseDto, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
+    public async Task<List<EventResponseDto>> GetListAsync(Expression<Func<Event, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
-       List<EventResponseDto> EventList=await _eventRepository.GetListAsync(predicate, orderBy, include, withDeleted, enableTracking,cancellationToken); 
+       List<Event> EventList=await _eventRepository.GetListAsync(predicate, orderBy, include, withDeleted, enableTracking,cancellationToken); 
         
         List<EventResponseDto> response=mapper.Map<List<EventResponseDto>>(EventList);
         return response;

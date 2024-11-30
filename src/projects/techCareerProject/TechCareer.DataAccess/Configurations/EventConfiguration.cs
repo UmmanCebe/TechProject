@@ -24,10 +24,12 @@ namespace TechCareer.DataAccess.Configurations
 
             builder.HasQueryFilter(u => !u.DeletedDate.HasValue);
 
-            builder.HasOne(u => u.CategoryName)
+            builder.HasOne(u => u.Category)
                 .WithMany(c => c.Events)
                 .HasForeignKey(u => u.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Navigation(@event => @event.Category).AutoInclude();
         }
     }
 }

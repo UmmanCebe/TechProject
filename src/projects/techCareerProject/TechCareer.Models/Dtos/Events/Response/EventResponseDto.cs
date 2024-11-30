@@ -11,5 +11,5 @@ public sealed record EventResponseDto
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
     public string ParticipationText { get; init; }
-    public int CategoryId { get; init; }
+    public string CategoryName { get; init; }
 }
