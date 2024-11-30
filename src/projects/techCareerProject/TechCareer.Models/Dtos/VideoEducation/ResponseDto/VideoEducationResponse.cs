@@ -1,4 +1,5 @@
-﻿using TechCareer.Models.Enums;
+﻿using TechCareer.Models.Entities;
+using TechCareer.Models.Enums;
 
 namespace TechCareer.Models.Dtos.VideoEducation.ResponseDto;
 
@@ -12,5 +13,6 @@ public class VideoEducationResponse
     public Level Level { get; init; }
     public string ImageUrl { get; init; }
     public Guid InstructorId { get; init; }
+    public Instructor? Instructor { get; init; }
     public string ProgrammingLanguage { get; init; }
 }

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TechCareer.Models.Dtos.Instructor.Request;
+using TechCareer.Models.Dtos.Instructors.Request;
 using TechCareer.Models.Enums;
 
 namespace TechCareer.Service.Validations.Instructor.InstructorCreateRequestValidator;

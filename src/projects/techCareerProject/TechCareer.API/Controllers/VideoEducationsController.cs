@@ -52,7 +52,9 @@ namespace TechCareer.API.Controllers
         [HttpGet("{id:int}/details")]
         public async Task<IActionResult> GetDetails(int id)
         {
-            // TODO: Video Education Details dto yazildiktan sonra bu endpoint implement edilecek.
+            var result = await videoEducationService.GetAsync(
+                predicate: u => u.Id == id,
+                include: true);
             return Ok();
         }
 
