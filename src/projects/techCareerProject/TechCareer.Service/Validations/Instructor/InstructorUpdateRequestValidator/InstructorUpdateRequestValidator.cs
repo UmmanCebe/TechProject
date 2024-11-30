@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TechCareer.Models.Dtos.Instructor.Request;
+using TechCareer.Models.Dtos.Instructors.Request;
 using TechCareer.Service.Constants;
 
 namespace TechCareer.Service.Validations.Instructor.InstructorUpdateRequestValidator;

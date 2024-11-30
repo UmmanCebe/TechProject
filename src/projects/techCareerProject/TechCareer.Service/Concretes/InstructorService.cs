@@ -2,8 +2,8 @@
 using Core.Persistence.Extensions;
 using System.Linq.Expressions;
 using TechCareer.DataAccess.Repositories.Abstracts;
-using TechCareer.Models.Dtos.Instructor.Request;
-using TechCareer.Models.Dtos.Instructor.Response;
+using TechCareer.Models.Dtos.Instructors.Request;
+using TechCareer.Models.Dtos.Instructors.Response;
 using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;

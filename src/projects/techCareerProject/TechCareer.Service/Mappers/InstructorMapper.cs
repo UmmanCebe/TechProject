@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Core.Persistence.Extensions;
 using Core.Security.Entities;
-using TechCareer.Models.Dtos.Instructor.Request;
-using TechCareer.Models.Dtos.Instructor.Response;
+using TechCareer.Models.Dtos.Instructors.Request;
+using TechCareer.Models.Dtos.Instructors.Response;
 using TechCareer.Models.Dtos.Users;
 using TechCareer.Models.Entities;
 

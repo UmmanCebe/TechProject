@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TechCareer.Models.Dtos.Instructor.Request;
+namespace TechCareer.Models.Dtos.Instructors.Request;
 
 public class InstructorCreateRequestDto
 {

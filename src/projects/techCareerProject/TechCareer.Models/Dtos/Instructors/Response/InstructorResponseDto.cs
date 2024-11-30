@@ -1,6 +1,4 @@
-﻿
-
-namespace TechCareer.Models.Dtos.Instructor.Response;
+﻿namespace TechCareer.Models.Dtos.Instructors.Response;
 
 public class InstructorResponseDto
 {
