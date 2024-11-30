@@ -11,4 +11,5 @@ public class Event : Entity<Guid>
     public DateTime ApplicationDeadline { get; set; }
     public string ParticipationText { get; set; }
     public int CategoryId { get; set; }
+    public Category  CategoryName { get; set; }
 }
