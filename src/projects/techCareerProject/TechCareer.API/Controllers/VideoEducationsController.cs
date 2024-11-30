@@ -9,10 +9,17 @@ namespace TechCareer.API.Controllers
     [ApiController]
     public class VideoEducationsController(IVideoEducationService videoEducationService) : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetList()
         {
             var result = await videoEducationService.GetListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("getallbyinstructor/{instructorId:guid}")]
+        public async Task<IActionResult> GetListByInstructor(Guid instructorId)
+        {
+            var result = await videoEducationService.GetListAsync(u => u.InstructorId == instructorId);
             return Ok(result);
         }
 
@@ -23,11 +30,30 @@ namespace TechCareer.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getallpaginatebyinstructor/{instructorId:guid}")]
+        public async Task<IActionResult> GetByInstructorPaginate([FromQuery] int index, [FromQuery] int size, Guid instructorId)
+        {
+            var result = await videoEducationService.GetPaginateAsync(
+                index: index,
+                size: size,
+                predicate: (u => u.InstructorId == instructorId));
+            return Ok(result);
+        }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await videoEducationService.GetAsync(u => u.Id == id);
+            var result = await videoEducationService.GetAsync(
+                predicate: u => u.Id == id,
+                include: false);
             return Ok(result);
+        }
+
+        [HttpGet("{id:int}/details")]
+        public async Task<IActionResult> GetDetails(int id)
+        {
+            // TODO: Video Education Details dto yazildiktan sonra bu endpoint implement edilecek.
+            return Ok();
         }
 
         [HttpPost]
