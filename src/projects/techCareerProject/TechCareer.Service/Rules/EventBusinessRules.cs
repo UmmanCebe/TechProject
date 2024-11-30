@@ -21,7 +21,7 @@ public sealed class EventBusinessRules(IEventRepository _eventRepository): BaseB
     public async Task EventIdShouldBeExistsWhenSelected(Guid id)
     {
         bool doesExist = await _eventRepository.AnyAsync(predicate: u => u.Id == id, enableTracking: false);
-        if (doesExist)
+        if (doesExist is false)
             throw new BusinessException(EventMessage.EventDontExists);
     }
 
