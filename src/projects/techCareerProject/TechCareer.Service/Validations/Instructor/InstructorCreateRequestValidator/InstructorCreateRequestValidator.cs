@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
-using TechCareer.Models.Dtos.Instructor.Request;
+using TechCareer.Models.Dtos.Instructors.Request;
 using TechCareer.Models.Enums;
+using TechCareer.Service.Constants;
 
 namespace TechCareer.Service.Validations.Instructor.InstructorCreateRequestValidator;
 public class InstructorCreateRequestValidator : AbstractValidator<InstructorCreateRequestDto>
 {
     public InstructorCreateRequestValidator()
     {
-        RuleFor(i => i.Name).NotEmpty().WithMessage("Eğitmen adı alanı boş olamaz.");
-        RuleFor(i => i.About).NotEmpty().WithMessage("Hakkında alanı boş olamaz")
-            .Length(10, 150).WithMessage("Hakkında alanı minimum 10 maksimum 150 karakter olabilir.");
+        RuleFor(i => i.Name).NotEmpty().WithMessage(InstructorMessages.InstructorNameNotBeEmpty);
+        RuleFor(i => i.About).NotEmpty().WithMessage(InstructorMessages.InstructorAboutFieldNotBeEmpty)
+            .Length(10, 150).WithMessage(InstructorMessages.InstructorAboutFieldLength);
     }
 }

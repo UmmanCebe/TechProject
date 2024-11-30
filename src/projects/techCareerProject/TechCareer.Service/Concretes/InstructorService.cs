@@ -22,22 +22,25 @@ public sealed class InstructorService : IInstructorService
         _instructorBusinessRules = instructorBusinessRules;
     }
 
-    public async Task<Instructor> AddAsync(InstructorCreateRequestDto dto)
+    public async Task<InstructorResponseDto> AddAsync(InstructorCreateRequestDto dto)
     {
         Instructor addedInstructor = _mapper.Map<Instructor>(dto);
         Instructor instructor = await _instructorRepository.AddAsync(addedInstructor);
-        return instructor;
+        InstructorResponseDto response = _mapper.Map<InstructorResponseDto>(instructor);
+        return response;
     }
 
-    public async Task<Instructor> DeleteAsync(Instructor instructor, bool permanent = false)
+    public async Task<InstructorResponseDto> DeleteAsync(Guid id, bool permanent = false)
     {
-        await _instructorBusinessRules.InstructorShouldBeExistsWhenSelected(instructor);
+        await _instructorBusinessRules.InstructorIdShouldBeExistsWhenSelected(id);
 
-        Instructor deletedInstructor = await _instructorRepository.DeleteAsync(instructor, permanent);
-        return deletedInstructor;
+        Instructor? Instructor = await _instructorRepository.GetAsync(i => i.Id == id);
+        Instructor deletedInstructor = await _instructorRepository.DeleteAsync(Instructor, permanent);
+        InstructorResponseDto response = _mapper.Map<InstructorResponseDto>(deletedInstructor);
+        return response;
     }
 
-    public async Task<List<Instructor>> GetAllAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
+    public async Task<List<InstructorResponseDto>> GetAllAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
         IOrderedQueryable<Instructor>>? orderBy = null, bool include = false,
         bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -49,16 +52,18 @@ public sealed class InstructorService : IInstructorService
             enableTracking,
             cancellationToken
             );
-        return instructorList;
+        List<InstructorResponseDto> response = _mapper.Map<List<InstructorResponseDto>>(instructorList);
+        return response;
     }
 
-    public async Task<Instructor?> GetOneAsync(Expression<Func<Instructor, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
+    public async Task<InstructorResponseDto?> GetOneAsync(Expression<Func<Instructor, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
         Instructor? instructor = await _instructorRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
-        return instructor;
+        InstructorResponseDto response = _mapper.Map<InstructorResponseDto>(instructor);
+        return response;
     }
 
-    public async Task<Paginate<Instructor>> GetPaginateAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
+    public async Task<Paginate<InstructorResponseDto>> GetPaginateAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
         IOrderedQueryable<Instructor>>? orderBy = null, bool include = false, int index = 0, int size = 10, bool withDeleted = false,
         bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -72,7 +77,8 @@ public sealed class InstructorService : IInstructorService
                 enableTracking,
                 cancellationToken
             );
-        return instructorList;
+        Paginate<InstructorResponseDto> response = _mapper.Map<Paginate<InstructorResponseDto>>(instructorList);
+        return response;
     }
 
     public async Task<InstructorResponseDto> UpdateAsync(InstructorUpdateRequestDto dto, Guid id)
@@ -81,6 +87,7 @@ public sealed class InstructorService : IInstructorService
 
         Instructor? instructor = await _instructorRepository.GetAsync(i => i.Id == id);
         instructor = _mapper.Map(dto, instructor);
+        instructor.Id = id;
         Instructor updateInstructor = await _instructorRepository.UpdateAsync(instructor);
 
         InstructorResponseDto response = _mapper.Map<InstructorResponseDto>(updateInstructor);

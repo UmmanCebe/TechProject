@@ -7,7 +7,7 @@ using TechCareer.Models.Entities;
 namespace TechCareer.Service.Abstracts;
 public interface IInstructorService
 {
-    Task<Instructor?> GetOneAsync(
+    Task<InstructorResponseDto?> GetOneAsync(
         Expression<Func<Instructor, bool>> predicate,
         bool include = false,
         bool withDeleted = false,
@@ -15,7 +15,7 @@ public interface IInstructorService
         CancellationToken cancellationToken = default
         );
 
-    Task<Paginate<Instructor>> GetPaginateAsync(
+    Task<Paginate<InstructorResponseDto>> GetPaginateAsync(
         Expression<Func<Instructor, bool>>? predicate = null,
         Func<IQueryable<Instructor>, IOrderedQueryable<Instructor>>? orderBy = null,
         bool include = false,
@@ -26,7 +26,7 @@ public interface IInstructorService
         CancellationToken cancellationToken = default
         );
 
-    Task<List<Instructor>> GetAllAsync(
+    Task<List<InstructorResponseDto>> GetAllAsync(
         Expression<Func<Instructor, bool>>? predicate = null,
         Func<IQueryable<Instructor>, IOrderedQueryable<Instructor>>? orderBy = null,
         bool include = false,
@@ -35,7 +35,7 @@ public interface IInstructorService
         CancellationToken cancellationToken = default
         );
 
-    Task<Instructor> AddAsync(InstructorCreateRequestDto dto);
+    Task<InstructorResponseDto> AddAsync(InstructorCreateRequestDto dto);
     Task<InstructorResponseDto> UpdateAsync(InstructorUpdateRequestDto dto,Guid id);
-    Task<Instructor> DeleteAsync(Instructor ınstructor, bool permanent = false);
+    Task<InstructorResponseDto> DeleteAsync(Guid id, bool permanent = false);
 }
