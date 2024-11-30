@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using TechCareer.Models.Dtos.Category.RequestDto;
-using TechCareer.Models.Dtos.Category.ResponseDto;
+using TechCareer.Models.Dtos.Categories.RequestDto;
+using TechCareer.Models.Dtos.Categories.ResponseDto;
 using TechCareer.Models.Entities;
 
 
