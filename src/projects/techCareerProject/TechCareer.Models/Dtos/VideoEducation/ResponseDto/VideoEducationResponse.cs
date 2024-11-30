@@ -12,7 +12,6 @@ public class VideoEducationResponse
     public bool IsCertified { get; init; }
     public Level Level { get; init; }
     public string ImageUrl { get; init; }
-    public Guid InstructorId { get; init; }
-    public Instructor? Instructor { get; init; }
+    public string InstructorName { get; init; }
     public string ProgrammingLanguage { get; init; }
 }

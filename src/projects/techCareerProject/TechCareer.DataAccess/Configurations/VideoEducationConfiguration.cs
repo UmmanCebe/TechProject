@@ -31,6 +31,8 @@ public class VideoEducationConfiguration : IEntityTypeConfiguration<VideoEducati
             .HasForeignKey(videoEducation => videoEducation.InstructorId)
             .OnDelete(DeleteBehavior.NoAction);
 
+        builder.Navigation(videoEducation => videoEducation.Instructor).AutoInclude();
+
     }
 
 }

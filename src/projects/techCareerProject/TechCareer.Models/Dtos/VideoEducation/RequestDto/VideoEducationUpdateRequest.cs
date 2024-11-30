@@ -8,7 +8,8 @@ public class VideoEducationUpdateRequest
     public string Description { get; init; }
     public double TotalHour { get; init; }
     public bool IsCertified { get; init; }
-    public Level Level { get; init; }
+    public int Level { get; init; }
     public string ImageUrl { get; init; }
+    public Guid InstructorId { get; init; }
     public string ProgrammingLanguage { get; init; }
 }
