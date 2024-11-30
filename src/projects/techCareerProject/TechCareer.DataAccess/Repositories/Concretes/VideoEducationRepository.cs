@@ -5,6 +5,6 @@ using TechCareer.Models.Entities;
 
 namespace TechCareer.DataAccess.Repositories.Concretes;
 
-public sealed class VideoEducationRepository(BaseDbContext context) : EfRepositoryBase<VideoEducation, int, BaseDbContext>(context), IVideoEducationRepository
+public class VideoEducationRepository(BaseDbContext context) : EfRepositoryBase<VideoEducation, int, BaseDbContext>(context), IVideoEducationRepository
 {
 }
