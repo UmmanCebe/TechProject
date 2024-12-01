@@ -5,8 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using TechCareer.Models.Dtos.Category.RequestDto;
-using TechCareer.Models.Dtos.Category.ResponseDto;
+using TechCareer.Models.Dtos.Categories.RequestDto;
+using TechCareer.Models.Dtos.Categories.ResponseDto;
+
 using TechCareer.Models.Entities;
 
 namespace TechCareer.Service.Abstracts;
