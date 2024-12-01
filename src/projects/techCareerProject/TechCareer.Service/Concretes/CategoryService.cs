@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using Core.Persistence.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TechCareer.DataAccess.Repositories.Abstracts;
 using TechCareer.Models.Dtos.Categories.RequestDto;
 using TechCareer.Models.Dtos.Categories.ResponseDto;
@@ -15,7 +10,7 @@ using TechCareer.Service.Rules;
 
 namespace TechCareer.Service.Concretes;
 
-public sealed class CategoryService(ICategoryRepository _categoryRepository,
+public class CategoryService(ICategoryRepository _categoryRepository,
                                       CategoryBusinessRules _categoryBusinessRules,
                                       IMapper _mapper) : ICategoryService
 {
@@ -92,18 +87,16 @@ public sealed class CategoryService(ICategoryRepository _categoryRepository,
         return _mapper.Map<CategoryDto>(addedCategory);
     }
 
-    public async Task<CategoryDto> UpdateAsync(UpdateCategoryRequestDto updateCategoryRequestDto)
+    public async Task<CategoryDto> UpdateAsync(int id, UpdateCategoryRequestDto request)
     {
-        // Validate business rules
-        await _categoryBusinessRules.CategoryNameShouldNotExistWhenUpdate(updateCategoryRequestDto.Id, updateCategoryRequestDto.Name);
+        await _categoryBusinessRules.CategoryIdShouldBeExistsWhenSelected(id);
 
-        // Map UpdateCategoryRequestDto to Category
-        var category = _mapper.Map<Category>(updateCategoryRequestDto);
-
-        var updatedCategory = await _categoryRepository.UpdateAsync(category);
-
-        // Map updated Category to CategoryDto
-        return _mapper.Map<CategoryDto>(updatedCategory);
+        Category category = (await _categoryRepository.GetAsync(u => u.Id == id))!;
+        category = _mapper.Map(request, category);
+        category.Id = id;
+        Category updatedCategory = await _categoryRepository.UpdateAsync(category);
+        CategoryDto response = _mapper.Map<CategoryDto>(updatedCategory);
+        return response;
     }
 
     public async Task<CategoryDto> DeleteAsync(int id, bool permanent = false)

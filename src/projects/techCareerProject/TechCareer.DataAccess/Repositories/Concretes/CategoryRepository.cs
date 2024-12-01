@@ -5,7 +5,6 @@ using TechCareer.Models.Entities;
 
 namespace TechCareer.DataAccess.Repositories.Concretes;
 
-public sealed class CategoryRepository(BaseDbContext context) : EfRepositoryBase<Category, int, BaseDbContext>(context), ICategoryRepository
+public class CategoryRepository(BaseDbContext context) : EfRepositoryBase<Category, int, BaseDbContext>(context), ICategoryRepository
 {
-
 }

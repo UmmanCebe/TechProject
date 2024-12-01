@@ -27,10 +27,10 @@ public class CategoryController(ICategoryService _categoryService): ControllerBa
         return Ok(result);
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryRequestDto dto, CancellationToken cancellationToken)
+    [HttpPut("update/{id:int}")]
+    public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryRequestDto dto, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.UpdateAsync(dto);
+        var result = await _categoryService.UpdateAsync(id, dto);
         return Ok(result);
     }
 

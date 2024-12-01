@@ -44,7 +44,7 @@ public interface ICategoryService
     );
 
     Task<CategoryDto> AddAsync(CreateCategoryRequestDto createCategoryRequestDto);
-    Task<CategoryDto> UpdateAsync(UpdateCategoryRequestDto  updateCategoryRequestDto);
+    Task<CategoryDto> UpdateAsync(int id, UpdateCategoryRequestDto updateCategoryRequestDto);
     Task<CategoryDto> DeleteAsync(int id, bool permanent = false);
 }
 
