@@ -30,11 +30,12 @@ public sealed class InstructorService : IInstructorService
         return response;
     }
 
-    public async Task<InstructorResponseDto> DeleteAsync(Guid id, bool permanent = false)
+    public async Task<InstructorResponseDto> DeleteAsync(Guid id, bool permanent)
     {
         await _instructorBusinessRules.InstructorIdShouldBeExistsWhenSelected(id);
 
         Instructor? Instructor = await _instructorRepository.GetAsync(i => i.Id == id);
+
         Instructor deletedInstructor = await _instructorRepository.DeleteAsync(Instructor, permanent);
         InstructorResponseDto response = _mapper.Map<InstructorResponseDto>(deletedInstructor);
         return response;
