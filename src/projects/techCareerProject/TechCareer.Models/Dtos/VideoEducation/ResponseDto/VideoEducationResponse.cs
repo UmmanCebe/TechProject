@@ -14,4 +14,6 @@ public class VideoEducationResponse
     public string ImageUrl { get; init; }
     public string InstructorName { get; init; }
     public string ProgrammingLanguage { get; init; }
+    public DateTime CreatedDate { get; init; }
+    public DateTime UpdatedDate { get; init; }
 }
