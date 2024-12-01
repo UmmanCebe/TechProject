@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using Core.CrossCuttingConcerns.Exceptions.ExceptionTypes;
 using Moq;
 using NUnit.Framework;
 using TechCareer.DataAccess.Repositories.Abstracts;
@@ -172,7 +173,50 @@ namespace Tests
             _mockRepository.Verify(repo => repo.UpdateAsync(existingVideoEducation), Times.Once);
         }
 
+        [Test]
+        public async Task UpdateAsync_WhenVideoEducationDoesNotExist_ThrowsException()
+        {
+            // Arrange
+            int id = 1;
+            var updateRequest = new VideoEducationUpdateRequest { Title = "New Title" };
 
+            _mockRepository
+                .Setup(repo => repo.GetAsync(x => x.Id == id, true, false, true, default))
+                .ReturnsAsync((VideoEducation)null);
+
+            // Act & Assert
+            Assert.ThrowsAsync<NullReferenceException>(() => _service.UpdateAsync(id, updateRequest));
+        }
+
+        [Test]
+        public async Task GetPaginateAsync_WhenNoVideoEducationsExist_ReturnsEmptyList()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.GetListAsync(It.IsAny<Expression<Func<VideoEducation, bool>>>(),null,true,false,true,default))
+                .ReturnsAsync(new List<VideoEducation>());
+
+            // Act
+            var result = await _service.GetListAsync();
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public async Task GetAllAsync_WhenEmptyCollection_ReturnsEmptyList()
+        {
+            // Arrange
+            _mockRepository
+                .Setup(repo => repo.GetListAsync(It.IsAny<Expression<Func<VideoEducation, bool>>>(),null,true,false,true,default))
+                .ReturnsAsync(new List<VideoEducation>());
+
+            // Act
+            var result = await _service.GetListAsync();
+
+            // Assert
+            Assert.IsNull(result);
+        }
 
     }
 }
