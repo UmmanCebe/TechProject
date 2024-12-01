@@ -13,6 +13,8 @@ public class InstructorConfiguration : IEntityTypeConfiguration<Instructor>
         builder.Property(i => i.Name).HasColumnName("Name").IsRequired();
         builder.Property(i => i.About).HasColumnName("About").IsRequired().HasMaxLength(150);
 
+        builder.HasQueryFilter(i => !i.DeletedDate.HasValue);
+
         builder.HasMany(i =>i.VideoEducations)
             .WithOne(v => v.Instructor)
             .HasForeignKey(v => v.InstructorId)

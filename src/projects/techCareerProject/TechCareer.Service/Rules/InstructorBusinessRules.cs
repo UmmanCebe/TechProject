@@ -5,19 +5,19 @@ using TechCareer.Models.Entities;
 using TechCareer.Service.Constants;
 
 namespace TechCareer.Service.Rules;
-public sealed class InstructorBusinessRules(IInstructorRepository _instructorRepository) : BaseBusinessRules
+public class InstructorBusinessRules(IInstructorRepository _instructorRepository) : BaseBusinessRules
 {
-    public Task InstructorShouldBeExistsWhenSelected(Instructor instructor)
+    public virtual Task InstructorShouldBeExistsWhenSelected(Instructor? instructor)
     {
         if (instructor is null)
             throw new BusinessException(InstructorMessages.InstructorDontExists);
         return Task.CompletedTask;
     }
 
-    public async Task InstructorIdShouldBeExistsWhenSelected(Guid id)
+    public async virtual Task InstructorIdShouldBeExistsWhenSelected(Guid id)
     {
         bool doesExist = await _instructorRepository.AnyAsync(predicate: i => i.Id == id, enableTracking: false);
-        if (doesExist)
+        if (doesExist is false)
             throw new BusinessException(InstructorMessages.InstructorDontExists);
     }
 }
