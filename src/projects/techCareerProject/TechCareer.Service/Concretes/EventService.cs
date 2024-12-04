@@ -84,7 +84,7 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     public async Task<EventResponseDto> DeleteAsync(Guid id, bool permanent = false)
     {
         await _eventBusinessRules.EventIdShouldBeExistsWhenSelected(id);
-        Event eventToBeDeleted = (await _eventRepository.GetAsync(u => u.Id == id))!;
+        Event? eventToBeDeleted = (await _eventRepository.GetAsync(u => u.Id == id))!;
         Event deletedEvent = await _eventRepository.DeleteAsync(eventToBeDeleted, permanent);
         EventResponseDto response=mapper.Map<EventResponseDto>(deletedEvent);
         return response ;

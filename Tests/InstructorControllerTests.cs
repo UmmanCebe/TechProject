@@ -38,6 +38,7 @@ namespace Tests
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
+
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(instructors, okResult.Value);
