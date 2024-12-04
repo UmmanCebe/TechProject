@@ -7,10 +7,10 @@ using TechCareer.Service.Constants;
 
 namespace TechCareer.Service.Rules;
 
-public sealed class EventBusinessRules(IEventRepository _eventRepository): BaseBusinessRules
+public  class EventBusinessRules(IEventRepository _eventRepository): BaseBusinessRules
 {
 
-    public Task EventShouldBeExistsWhenSelected(Event? @event)
+    public virtual Task EventShouldBeExistsWhenSelected(Event? @event)
     {
         if (@event == null)
             throw new BusinessException(EventMessage.EventDontExists);
@@ -18,7 +18,7 @@ public sealed class EventBusinessRules(IEventRepository _eventRepository): BaseB
     }
 
 
-    public async Task EventIdShouldBeExistsWhenSelected(Guid id)
+    public async virtual Task EventIdShouldBeExistsWhenSelected(Guid id)
     {
         bool doesExist = await _eventRepository.AnyAsync(predicate: u => u.Id == id, enableTracking: false);
         if (doesExist is false)
