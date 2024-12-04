@@ -15,9 +15,10 @@ namespace TechCareer.Service.Concretes;
 public sealed class EventService(IEventRepository _eventRepository, EventBusinessRules _eventBusinessRules, IMapper mapper) : IEventService
 {
 
-    public async Task<EventResponseDto> GetAsync(Expression<Func<Event, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
+    public async Task<EventResponseDto> GetAsync(Expression<Func<Event, bool>> predicate, bool include = false, bool withDeleted = false, bool enableTracking = true,
+        CancellationToken cancellationToken = default)
     {
-       Event? @event = await _eventRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
+        Event? @event = await _eventRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
 
         EventResponseDto response = mapper.Map<EventResponseDto>(@event);
         return response;
@@ -42,11 +43,11 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     }
 
 
-    public async Task<List<EventResponseDto>> GetListAsync(Expression<Func<Event, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
+    public async Task<List<EventResponseDto>> GetListAsync(Expression<Func<Event, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, bool withDeleted = false, bool enableTracking = false, CancellationToken cancellationToken = default)
     {
-       List<Event> EventList=await _eventRepository.GetListAsync(predicate, orderBy, include, withDeleted, enableTracking,cancellationToken); 
-        
-        List<EventResponseDto> response=mapper.Map<List<EventResponseDto>>(EventList);
+        List<Event> EventList = await _eventRepository.GetListAsync(predicate, orderBy, include, withDeleted, enableTracking, cancellationToken);
+
+        List<EventResponseDto> response = mapper.Map<List<EventResponseDto>>(EventList);
         return response;
     }
 
@@ -54,10 +55,10 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
 
     public async Task<EventResponseDto> AddAsync(EventCreateRequestDto request)
     {
-        Event @event= mapper.Map<Event>(request);
-        Event addedEvent= await _eventRepository.AddAsync(@event);
+        Event @event = mapper.Map<Event>(request);
+        Event addedEvent = await _eventRepository.AddAsync(@event);
 
-        EventResponseDto response=mapper.Map<EventResponseDto>(addedEvent);
+        EventResponseDto response = mapper.Map<EventResponseDto>(addedEvent);
         return response;
     }
 
@@ -86,8 +87,8 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
         await _eventBusinessRules.EventIdShouldBeExistsWhenSelected(id);
         Event eventToBeDeleted = (await _eventRepository.GetAsync(u => u.Id == id))!;
         Event deletedEvent = await _eventRepository.DeleteAsync(eventToBeDeleted, permanent);
-        EventResponseDto response=mapper.Map<EventResponseDto>(deletedEvent);
-        return response ;
+        EventResponseDto response = mapper.Map<EventResponseDto>(deletedEvent);
+        return response;
 
     }
 }
