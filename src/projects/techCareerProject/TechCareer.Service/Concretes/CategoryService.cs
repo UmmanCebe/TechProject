@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.AOP.Aspects;
 using Core.Persistence.Extensions;
 using System.Linq.Expressions;
 using TechCareer.DataAccess.Repositories.Abstracts;
@@ -27,6 +28,8 @@ public class CategoryService(ICategoryRepository _categoryRepository,
         return category is not null ? _mapper.Map<CategoryDto>(category) : null;
     }
 
+
+    //[CacheAspect(cacheKeyTemplate: "Categories({page},{size})", bypassCache: false, cacheGroupKey: "Categories")]
     public async Task<Paginate<CategoryDto>> GetPaginateAsync(
         Expression<Func<Category, bool>>? predicate = null,
         Func<IQueryable<Category>, IOrderedQueryable<Category>>? orderBy = null,
@@ -52,6 +55,7 @@ public class CategoryService(ICategoryRepository _categoryRepository,
         return _mapper.Map<Paginate<CategoryDto>>(categories);
     }
 
+    //[CacheAspect(cacheKeyTemplate: "CategoryList", bypassCache: false, cacheGroupKey: "Categories")]
     public async Task<List<CategoryDto>> GetListAsync(
         Expression<Func<Category, bool>>? predicate = null,
         Func<IQueryable<Category>, IOrderedQueryable<Category>>? orderBy = null,
@@ -73,6 +77,9 @@ public class CategoryService(ICategoryRepository _categoryRepository,
         return _mapper.Map<List<CategoryDto>>(categories);
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Categories")]
+    [AuthorizeAspect("Admin")]
     public async Task<CategoryDto> AddAsync(CreateCategoryRequestDto createCategoryRequestDto)
     {
         // Validate business rules
@@ -87,6 +94,9 @@ public class CategoryService(ICategoryRepository _categoryRepository,
         return _mapper.Map<CategoryDto>(addedCategory);
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Categories")]
+    [AuthorizeAspect("Admin")]
     public async Task<CategoryDto> UpdateAsync(int id, UpdateCategoryRequestDto request)
     {
         await _categoryBusinessRules.CategoryIdShouldBeExistsWhenSelected(id);
@@ -99,6 +109,9 @@ public class CategoryService(ICategoryRepository _categoryRepository,
         return response;
     }
 
+    [LoggerAspect]
+   // [ClearCacheAspect("Categories")]
+    [AuthorizeAspect("Admin")]
     public async Task<CategoryDto> DeleteAsync(int id, bool permanent = false)
     {
         // Retrieve category to delete

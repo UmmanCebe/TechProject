@@ -27,7 +27,7 @@ public class VideoEducationService(
     }
 
 
-    //[CacheAspect(bypassCache:false, cacheKeyTemplate:"VideoEducations({index},{size})",cacheGroupKey:"VideoEducations",Priority = 3)]
+    //[CacheAspect(cacheKeyTemplate: "VideoEducations({page},{size})", bypassCache: false, cacheGroupKey: "VideoEducations")]
     public async Task<Paginate<VideoEducationResponse>> GetPaginateAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, int index = 0,
         int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -46,6 +46,7 @@ public class VideoEducationService(
         return response;
     }
 
+    //[CacheAspect(cacheKeyTemplate: "VideoEducationList", bypassCache: false, cacheGroupKey: "VideoEducations")]
     public async Task<List<VideoEducationResponse>> GetListAsync(Expression<Func<VideoEducation, bool>>? predicate = null, Func<IQueryable<VideoEducation>, IOrderedQueryable<VideoEducation>>? orderBy = null, bool include = false, bool withDeleted = false,
         bool enableTracking = false, CancellationToken cancellationToken = default)
     {
@@ -58,6 +59,9 @@ public class VideoEducationService(
         return response;
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("VideoEducations")]
+    [AuthorizeAspect("Admin")]
     public async Task<VideoEducationResponse> AddAsync(VideoEducationCreateRequest request)
     {
         VideoEducation videoEducation = mapper.Map<VideoEducation>(request);
@@ -69,6 +73,9 @@ public class VideoEducationService(
         return response;
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("VideoEducations")]
+    [AuthorizeAspect("Admin")]
     public async Task<VideoEducationResponse> UpdateAsync(int id, VideoEducationUpdateRequest request)
     {
         await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(id);
@@ -86,6 +93,9 @@ public class VideoEducationService(
         return response;
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("VideoEducations")]
+    [AuthorizeAspect("Admin")]
     public async Task<VideoEducationResponse> DeleteAsync(int id, bool permanent = false)
     {
         await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(id);

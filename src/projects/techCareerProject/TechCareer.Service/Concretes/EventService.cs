@@ -1,6 +1,7 @@
 ﻿
 
 using AutoMapper;
+using Core.AOP.Aspects;
 using Core.Persistence.Extensions;
 using System.Linq.Expressions;
 using TechCareer.DataAccess.Repositories.Abstracts;
@@ -26,6 +27,7 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     }
 
 
+    //[CacheAspect(cacheKeyTemplate: "Events({page},{size})", bypassCache: false, cacheGroupKey: "Events")]
     public async Task<Paginate<EventResponseDto>> GetPaginateAsync(Expression<Func<Event, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, int index = 0, int size = 10, bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
         Paginate<Event> eventList = await _eventRepository.GetPaginateAsync(
@@ -42,7 +44,7 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
         return response;
     }
 
-
+    //[CacheAspect(cacheKeyTemplate: "EventList", bypassCache: false, cacheGroupKey: "Events")]
     public async Task<List<EventResponseDto>> GetListAsync(Expression<Func<Event, bool>>? predicate = null, Func<IQueryable<Event>, IOrderedQueryable<Event>>? orderBy = null, bool include = false, bool withDeleted = false, bool enableTracking = false, CancellationToken cancellationToken = default)
     {
         List<Event> EventList = await _eventRepository.GetListAsync(predicate, orderBy, include, withDeleted, enableTracking, cancellationToken);
@@ -52,7 +54,9 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     }
 
 
-
+    [LoggerAspect]
+   // [ClearCacheAspect("Events")]
+    [AuthorizeAspect("Admin")]
     public async Task<EventResponseDto> AddAsync(EventCreateRequestDto request)
     {
         Event @event = mapper.Map<Event>(request);
@@ -63,6 +67,9 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     }
 
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Events")]
+    [AuthorizeAspect("Admin")]
     public async Task<EventResponseDto> UpdateAsync(Guid id, EventUpdateRequestDto request)
     {
         await _eventBusinessRules.EventIdShouldBeExistsWhenSelected(id);
@@ -82,6 +89,9 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
 
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Events")]
+    [AuthorizeAspect("Admin")]
     public async Task<EventResponseDto> DeleteAsync(Guid id, bool permanent = false)
     {
         await _eventBusinessRules.EventIdShouldBeExistsWhenSelected(id);
