@@ -10,6 +10,7 @@ public sealed record EventResponseDto
     public string ImageUrl { get; init; }
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
+    public DateTime ApplicationDeadline { get; init; }
     public string ParticipationText { get; init; }
     public string CategoryName { get; init; }
     public DateTime CreatedDate { get; init; }
