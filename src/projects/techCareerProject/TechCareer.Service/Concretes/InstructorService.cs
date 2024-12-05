@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.AOP.Aspects;
 using Core.Persistence.Extensions;
 using System.Linq.Expressions;
 using TechCareer.DataAccess.Repositories.Abstracts;
@@ -22,6 +23,9 @@ public sealed class InstructorService : IInstructorService
         _instructorBusinessRules = instructorBusinessRules;
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Instructors")]
+    [AuthorizeAspect("Admin")]
     public async Task<InstructorResponseDto> AddAsync(InstructorCreateRequestDto dto)
     {
         Instructor addedInstructor = _mapper.Map<Instructor>(dto);
@@ -30,6 +34,9 @@ public sealed class InstructorService : IInstructorService
         return response;
     }
 
+    [LoggerAspect]
+    //[ClearCacheAspect("Instructors")]
+    [AuthorizeAspect("Admin")]
     public async Task<InstructorResponseDto> DeleteAsync(Guid id, bool permanent)
     {
         await _instructorBusinessRules.InstructorIdShouldBeExistsWhenSelected(id);
@@ -41,6 +48,7 @@ public sealed class InstructorService : IInstructorService
         return response;
     }
 
+    //[CacheAspect(cacheKeyTemplate: "InstructorList", bypassCache: false, cacheGroupKey: "Instructors")]
     public async Task<List<InstructorResponseDto>> GetAllAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
         IOrderedQueryable<Instructor>>? orderBy = null, bool include = false,
         bool withDeleted = false, bool enableTracking = true, CancellationToken cancellationToken = default)
@@ -64,6 +72,7 @@ public sealed class InstructorService : IInstructorService
         return response;
     }
 
+    //[CacheAspect(cacheKeyTemplate: "Instructors({page},{size})", bypassCache: false, cacheGroupKey: "Instructors")]
     public async Task<Paginate<InstructorResponseDto>> GetPaginateAsync(Expression<Func<Instructor, bool>>? predicate = null, Func<IQueryable<Instructor>,
         IOrderedQueryable<Instructor>>? orderBy = null, bool include = false, int index = 0, int size = 10, bool withDeleted = false,
         bool enableTracking = true, CancellationToken cancellationToken = default)
@@ -82,6 +91,9 @@ public sealed class InstructorService : IInstructorService
         return response;
     }
 
+    [LoggerAspect]
+   // [ClearCacheAspect("Instructors")]
+    [AuthorizeAspect("Admin")]
     public async Task<InstructorResponseDto> UpdateAsync(InstructorUpdateRequestDto dto, Guid id)
     {
         await _instructorBusinessRules.InstructorIdShouldBeExistsWhenSelected(id);
