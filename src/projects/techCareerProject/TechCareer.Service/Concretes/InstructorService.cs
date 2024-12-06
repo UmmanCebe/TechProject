@@ -9,6 +9,7 @@ using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
 using TechCareer.Service.Validations.Instructor.InstructorCreateRequestValidator;
+using TechCareer.Service.Validations.Instructor.InstructorUpdateRequestValidator;
 
 namespace TechCareer.Service.Concretes;
 public sealed class InstructorService : IInstructorService
@@ -96,6 +97,7 @@ public sealed class InstructorService : IInstructorService
     [LoggerAspect]
    // [ClearCacheAspect("Instructors")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(InstructorUpdateRequestValidator))]
     public async Task<InstructorResponseDto> UpdateAsync(InstructorUpdateRequestDto dto, Guid id)
     {
         await _instructorBusinessRules.InstructorIdShouldBeExistsWhenSelected(id);

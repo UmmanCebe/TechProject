@@ -72,6 +72,7 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     [LoggerAspect]
     //[ClearCacheAspect("Events")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(EventUpdateRequestValidator))]
     public async Task<EventResponseDto> UpdateAsync(Guid id, EventUpdateRequestDto request)
     {
         await _eventBusinessRules.EventIdShouldBeExistsWhenSelected(id);

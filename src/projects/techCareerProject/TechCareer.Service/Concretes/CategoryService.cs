@@ -99,6 +99,7 @@ public class CategoryService(ICategoryRepository _categoryRepository,
     [LoggerAspect]
     //[ClearCacheAspect("Categories")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(UpdateCategoryValidator))]
     public async Task<CategoryDto> UpdateAsync(int id, UpdateCategoryRequestDto request)
     {
         await _categoryBusinessRules.CategoryIdShouldBeExistsWhenSelected(id);

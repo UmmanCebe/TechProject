@@ -78,6 +78,7 @@ public class VideoEducationService(
     [LoggerAspect]
     //[ClearCacheAspect("VideoEducations")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(VideoEducationUpdateRequestValidator))]
     public async Task<VideoEducationResponse> UpdateAsync(int id, VideoEducationUpdateRequest request)
     {
         await _videoEducationBusinessRules.VideoEducationIdShouldBeExistsWhenSelected(id);
