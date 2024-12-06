@@ -8,6 +8,7 @@ using TechCareer.Models.Dtos.Categories.ResponseDto;
 using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
+using TechCareer.Service.Validations.Category;
 
 namespace TechCareer.Service.Concretes;
 
@@ -80,6 +81,7 @@ public class CategoryService(ICategoryRepository _categoryRepository,
     [LoggerAspect]
     //[ClearCacheAspect("Categories")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(CreateCategoryValidator))]
     public async Task<CategoryDto> AddAsync(CreateCategoryRequestDto createCategoryRequestDto)
     {
         // Validate business rules

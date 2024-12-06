@@ -10,6 +10,7 @@ using TechCareer.Models.Dtos.Events.Response;
 using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
+using TechCareer.Service.Validations.Events;
 
 namespace TechCareer.Service.Concretes;
 
@@ -57,6 +58,7 @@ public sealed class EventService(IEventRepository _eventRepository, EventBusines
     [LoggerAspect]
    // [ClearCacheAspect("Events")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(EventCreateRequestValidator))]
     public async Task<EventResponseDto> AddAsync(EventCreateRequestDto request)
     {
         Event @event = mapper.Map<Event>(request);
