@@ -9,6 +9,7 @@ using TechCareer.Models.Dtos.VideoEducation.ResponseDto;
 using TechCareer.Models.Entities;
 using TechCareer.Service.Abstracts;
 using TechCareer.Service.Rules;
+using TechCareer.Service.Validations.Users;
 
 namespace TechCareer.Service.Concretes;
 public class VideoEducationService(
@@ -62,6 +63,7 @@ public class VideoEducationService(
     [LoggerAspect]
     //[ClearCacheAspect("VideoEducations")]
     [AuthorizeAspect("Admin")]
+    [ValidationAspect(typeof(VideoEducationCreateRequestValidator))]
     public async Task<VideoEducationResponse> AddAsync(VideoEducationCreateRequest request)
     {
         VideoEducation videoEducation = mapper.Map<VideoEducation>(request);
